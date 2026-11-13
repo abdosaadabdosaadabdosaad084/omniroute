@@ -36,11 +36,10 @@ input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px soli
 <div class="box" id="ttsBox">
 <h3 style="margin:0">🔊 نص لصوت</h3>
 <textarea id="txt2" rows="4">السلام عليكم ورحمة الله وبركاته</textarea>
-<p style="font-size:13px">بيشتغل في Phoenix - عربي وانجليزي تلقائي</p>
 <button class="btn" onclick="speak('txt2')">اسمع الصوت 🔊</button>
 <button class="btn2" onclick="stopSpeak()">وقف ⏹️</button>
 <div id="msg"></div>
-<audio id="player" style="display:none"></audio>
+<audio id="player" controls style="width:100%;margin-top:10px"></audio>
 </div>
 
 <div class="grid">
@@ -54,6 +53,7 @@ input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px soli
 
 <script>
 let player=document.getElementById('player');
+player.onerror=function(){ showMsg('txt2','السيرفر مردش، جرب تاني بعد 10 ثواني'); };
 function showBox(id){
 document.getElementById('talkBox').style.display='none';
 document.getElementById('ttsBox').style.display='none';
@@ -69,12 +69,12 @@ r.readAsDataURL(f);
 function speak(txtId){
 let t=document.getElementById(txtId).value.trim(); if(!t) return;
 let isArabic=/[\u0600-\u06FF]/.test(t);
-let lang=isArabic ? 'ar' : 'en';
-// طريقة جوجل - بتشتغل في Phoenix
-let url='https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q='+encodeURIComponent(t)+'&tl='+lang;
-showMsg(txtId,'جارٍ تشغيل الصوت... 🔊');
+// Zeina = عربي، Brian = انجليزي
+let voice=isArabic ? 'Zeina' : 'Brian';
+let url='https://api.streamelements.com/kappa/v2/speech?voice='+voice+'&text='+encodeURIComponent(t);
+showMsg(txtId,'جارٍ تحميل الصوت... 🔊 استنى 3 ثواني ودوس تشغيل لو مشتغلش لوحده');
 player.src=url;
-player.play().then(()=>{ showMsg(txtId,'شغال ✅'); }).catch(()=>{ showMsg(txtId,'افتح النت وعلي الصوت وجرب تاني'); });
+player.play().catch(()=>{ showMsg(txtId,'الصوت اتحمل تحت، دوس على زر التشغيل ▶️ في المشغل'); });
 }
 function showMsg(txtId,msg){ let id= txtId=='txt1' ? 'msg1':'msg'; document.getElementById(id).innerText=msg; }
 function stopSpeak(){ player.pause(); player.currentTime=0; }
