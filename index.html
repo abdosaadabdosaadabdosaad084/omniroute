@@ -1,30 +1,63 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OmniRoute</title>
 <style>
-body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;margin:0;padding:20px;text-align:center}
-h1{font-size:28px;margin:10px 0 5px}
-p{color:#94a3b8;margin:0 0 20px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:500px;margin:0 auto}
-button{background:#1e293b;color:#fff;border:1px solid #334155;border-radius:16px;padding:20px 10px;font-size:17px;cursor:pointer}
-button span{display:block;font-size:28px;margin-bottom:8px}
-button.main{background:#7c3aed;border-color:#7c3aed;grid-column:span 2}
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:#0b1226;color:#fff;text-align:center;padding:20px}
+h1{margin:10px 0 0;font-size:34px}
+p{color:#94a3b8}
+.hero{background:#7c3aed;border:0;color:#fff;width:100%;padding:18px;border-radius:16px;font-size:20px;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.card{background:#16203a;border:1px solid #26314d;padding:20px;border-radius:16px;font-size:18px}
+.box{background:#16203a;border:1px solid #26314d;border-radius:16px;padding:16px;margin-top:14px;display:none;text-align:right}
+input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0b1226;color:#fff;margin:8px 0}
+#preview{width:100%;max-height:220px;object-fit:cover;border-radius:12px;display:none}
+.btn{background:#7c3aed;border:0;color:#fff;width:100%;padding:14px;border-radius:12px;font-size:18px;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
 <h1>OmniRoute</h1>
 <p>كل خدمات الذكاء الاصطناعي في مكان واحد</p>
-<div class="grid">
-<button class="main" onclick="alert('صورتي تتكلم - جاري التجهيز')"><span>🎥</span>صورتي تتكلم</button>
-<button onclick="alert('اكتبلي - جاري التجهيز')"><span>✍️</span>اكتبلي</button>
-<button onclick="alert('ترجملي - جاري التجهيز')"><span>🌍</span>ترجملي</button>
-<button onclick="alert('نص لصوت - جاري التجهيز')"><span>🔊</span>نص لصوت</button>
-<button onclick="alert('انسخ صوتي - جاري التجهيز')"><span>🎙️</span>انسخ صوتي</button>
-<button onclick="alert('اعملي فيديو - جاري التجهيز')"><span>🎬</span>اعملي فيديو</button>
-<button onclick="alert('اعملي صورة - جاري التجهيز')"><span>🖼️</span>اعملي صورة</button>
+
+<button class="hero" onclick="showBox()">🎥 صورتي تتكلم</button>
+
+<div class="box" id="talkBox">
+<input type="file" accept="image/*" onchange="loadImg(event)">
+<img id="preview">
+<textarea id="txt" rows="3" placeholder="اكتب الكلام اللي عايز الصورة تقوله...">أهلا بيكم في OmniRoute</textarea>
+<button class="btn" onclick="speak()">خليها تتكلم 🔊</button>
 </div>
+
+<div class="grid">
+<div class="card">🌍<br>ترجملي</div>
+<div class="card">✍️<br>اكتبلي</div>
+<div class="card">🎤<br>انسخ صوتي</div>
+<div class="card">🔊<br>نص لصوت</div>
+<div class="card">🖼️<br>اعملي صورة</div>
+<div class="card">🎬<br>اعملي فيديو</div>
+</div>
+
+<script>
+function showBox(){
+document.getElementById('talkBox').style.display='block';
+window.scrollTo({top:200,behavior:'smooth'});
+}
+function loadImg(e){
+let f=e.target.files[0]; if(!f) return;
+let img=document.getElementById('preview');
+img.src=URL.createObjectURL(f); img.style.display='block';
+}
+function speak(){
+let t=document.getElementById('txt').value;
+if(!t) return;
+speechSynthesis.cancel();
+let u=new SpeechSynthesisUtterance(t);
+u.lang='ar-EG'; u.rate=1;
+speechSynthesis.speak(u);
+}
+</script>
 </body>
 </html>
